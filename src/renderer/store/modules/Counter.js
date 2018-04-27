@@ -1,8 +1,5 @@
 const state = {
-  main: 0,
-  menu: {
-    indentSpace: 20
-  }
+  main: 0
 }
 
 const mutations = {

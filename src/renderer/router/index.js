@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/main/MainPage').default
     },
     {
+      path: '/key-value',
+      name: 'key-value-page',
+      component: require('@/components/page/AppKeyValuePage').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

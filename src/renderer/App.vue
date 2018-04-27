@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppTitle/>
+    <AppTitle title="Rediger"/>
     <router-view></router-view>
   </div>
 </template>

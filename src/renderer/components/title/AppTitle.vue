@@ -1,5 +1,8 @@
 <template>
   <div id="app-title">
+      <div id="title-text">
+        {{ title }}
+      </div>
       <div id="app-title-btn-group">
           <AppTitleButton type="min"/>
           <AppTitleButton type="close"/>
@@ -12,6 +15,7 @@
 
   export default {
     name: 'AppTitle',
+    props: ['title'],
     components: {
       AppTitleButton
     },
@@ -29,6 +33,14 @@
     border-bottom: 1px solid rgb(43, 43, 43);
     box-sizing: border-box;
     overflow: hidden;
+}
+
+#title-text {
+  color: rgb(233, 231, 231);
+  margin-left: 20px;
+  height: 100%;
+  line-height: 30px;
+  float: left;
 }
 
 #app-title-btn-group {

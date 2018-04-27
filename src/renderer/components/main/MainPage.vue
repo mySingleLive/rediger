@@ -1,171 +1,75 @@
 <template>
   <div id="main">
       <div>
-        <button v-on:click="click">
-            Redis
-        </button>
-      </div>
-      <div>
         <div class="left">
-            <ul>
-                <template v-for="n in nodes">
-                    <li class="list-item" v-on:click="openNode(n)">
-                        <div class="text">{{ n.name }}</div>
-                    </li>
-                    <template v-if="n.children && n.children.length > 0">
-                        <template v-for="item in n.children">
-                            <li class="list-item" v-on:click="queryKey(item)"
-                               v-bind:style="{ paddingLeft: (item.indent * indentSpace) + 'px' }">
-                                <div class="text">{{ item.name }}</div>
-                            </li>
-                        </template>
-                    </template>
-                </template>
-            </ul>
+          <AppTree v-bind:nodes="nodes" indent="0" v-bind:options="treeOptions"/>
         </div>
         <div class="right">
-            <div>
-                Key: <span class="result-key"> {{ queryResult.key }} </span>
-            </div>
-            <div>
-                Value:
-                <div class="value-area" v-html="queryResult.value">
-                </div>
-            </div>
+            <component v-bind:is="pageType" v-bind:page="page"></component>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-  function syntaxHighlight (json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
-      function (match) {
-        var cls = 'number'
-        if (/^"/.test(match)) {
-          if (/:$/.test(match)) {
-            cls = 'key'
-            match += '&nbsp;&nbsp;&nbsp;&nbsp;'
-          } else {
-            cls = 'string'
-          }
-        } else if (/true|false/.test(match)) {
-          cls = 'boolean'
-        } else if (/null/.test(match)) {
-          cls = 'null'
-        }
-        return '<span class="' + cls + '">' + match + '</span>'
-      })
-    json = json
-      .replace(/\{/g, '<span class="left-brace">{</span><div class="block">')
-      .replace(/\}/g, '</div><span class="right-brace">}</span>')
-      .replace(/\[/g, '<span class="left-bracket">[</span><div class="block">')
-      .replace(/\]/g, '</div><span class="right-bracket">]</span>')
-      .replace(/,/g, ',<br/>')
-    return json
-  }
+  import AppTree from '../tree/AppTree'
+  import AppKeyValuePage from '../page/AppKeyValuePage'
+  import AppServerPage from '../page/AppServerPage'
+  import { mapMutations } from 'vuex'
+  import ServerNode from '../../../client/servernode'
 
-  let dbroot = {
-    name: 'test db',
-    data: {
-      port: 6379,
-      host: '120.27.240.62',
-      family: 4,
-      password: 'Beastredis',
-      db: 0
-    },
-    redis: undefined,
-    loaded: false,
-    indent: 0,
-    children: [],
-    connection: function () {
-      if (this.redis !== undefined) {
-        return
-      }
-      let Redis = require('ioredis')
-      this.redis = new Redis(dbroot.data)
-      this.redis.defineCommand('top', {
-        numberOfKeys: 1,
-        lua: 'return redis.call("SCAN", 0, "COUNT", tonumber(KEYS[1]))'
-      })
-    },
-    open: function () {
-      if (this.loaded) {
-        return
-      }
-      this.connection()
-      let self = this
-      this.redis.top(30, function (err, ret) {
-        if (err !== undefined && err !== null) {
-          console.log('error:', err)
-        } else {
-          if (ret && ret.length > 1) {
-            if (self.children === undefined) {
-              self.children = []
-            }
-            let vals = ret[1]
-            for (let i in vals) {
-              self.children.push({
-                name: vals[i],
-                type: 'key',
-                indent: self.indent + 1
-              })
-            }
-            console.log('nodes:', self.nodes)
-          }
-        }
-      })
-    }
-  }
+  let serverNode = new ServerNode('test db', {
+    port: 6379,
+    host: '120.27.240.62',
+    family: 4,
+    password: 'Beastredis',
+    db: 0
+  })
 
   export default {
     name: 'MainPage',
     data () {
       return {
         value: '',
+        page: {
+          key: 'Unknown',
+          value: 'Unknown',
+          type: ''
+        },
         nodes: [
-          dbroot
+          serverNode
         ],
-        queryResult: {
-          key: '',
-          value: ''
-        }
+        pageType: ''
       }
     },
     computed: {
       indentSpace () {
-        console.log('store:', this.$store)
-        return this.$store.state.Counter.menu.indentSpace
+        return this.$store.state.Content.menu.indentSpace
+      },
+      treeOptions () {
+        let self = this
+        return {
+          onSelect: function (node) {
+            self.SELECT_NODE(node)
+            self.page = node.getContent()
+            if (self.page === undefined || self.page.type === undefined) {
+              self.pageType = ''
+            } else {
+              self.pageType = 'App' + self.page.type + 'Page'
+            }
+          }
+        }
       }
     },
     methods: {
-      click: function () {
-        console.log('redis!!!')
-      },
-      openNode: function (n) {
-        n.open()
-      },
-      queryKey: function (n) {
-        console.log('node:', n)
-        syntaxHighlight('xxxx')
-        /*
-        let k = n.name
-        console.log('query key:', k)
-        let self = this
-        redis.get(k, function (err, ret) {
-          if (err !== undefined && err !== null) {
-            console.log('error:', err)
-          } else {
-            console.log('query result:', ret)
-            self.queryResult = {
-              key: k,
-              value: syntaxHighlight(ret)
-            }
-          }
-        })
-        */
-      }
+      ...mapMutations([
+        'SELECT_NODE'
+      ])
+    },
+    components: {
+      AppTree,
+      AppKeyValuePage,
+      AppServerPage
     }
   }
 </script>
@@ -206,39 +110,6 @@
         overflow: auto;
         font-size: 14px;
         font-weight: bolder
-    }
-
-    .right li, ul {
-        list-style-type: none;
-    }
-
-    .list-item {
-        height: 30px;
-        line-height: 30px;
-        cursor: default;
-        padding-right: 5px;
-        background: rgb(71, 71, 71);
-        color: white;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-        -ms-text-overflow: ellipsis;
-        box-sizing: border-box;
-    }
-
-    .list-item:hover {
-        background: rgb(81, 81, 81);
-    }
-
-    .list-item .text {
-        margin-right: 10px;
-        text-overflow:ellipsis;
-        white-space:nowrap;
-        display: inline-block;
-        overflow: hidden;
-    }
-
-    .list-indent {
-        padding-left: 50px;
     }
 
     .right .result-key {
