@@ -4,13 +4,13 @@
         <AppTreeNode
           v-bind:node="n"
           v-bind:indent="indent"
-          v-bind:options="nodeOptions" v-bind:singleSelected="false" />
+          v-bind:options="nodeOptions" :singleSelected="false" :doubleSelected="false" />
         <template v-if="n.children && n.children.length > 0">
           <li v-bind:key="n.name">
             <AppTree
               v-bind:nodes="n.children"
               v-bind:indent="indent + 1"
-              v-bind:options="options" :singleSelected="false" />
+              v-bind:options="options"/>
           </li>
         </template>
         <template v-else>
@@ -40,8 +40,8 @@
 
 <style>
     .list-item {
-        height: 30px;
-        line-height: 30px;
+        height: 22px;
+        line-height: 22px;
         cursor: default;
         padding-right: 5px;
         background: rgb(71, 71, 71);
@@ -50,6 +50,12 @@
         text-overflow:ellipsis;
         -ms-text-overflow: ellipsis;
         box-sizing: border-box;
+        moz-user-select: -moz-none; 
+        -moz-user-select: none; 
+        -o-user-select:none; 
+        -webkit-user-select:none; 
+        -ms-user-select:none; 
+        user-select:none;
     }
 
     .list-item:hover {
@@ -62,10 +68,19 @@
         white-space:nowrap;
         display: inline-block;
         overflow: hidden;
+        font-size: 14px;
     }
 
     .list-item-single-selected {
-        background: rgb(112, 122, 168);
+        background: rgb(121, 137, 209);
     }
-    
+    .list-item-single-selected:hover {
+        background: rgb(121, 137, 209);
+    }
+    .list-item-opend {
+        background: rgb(99, 104, 121);
+    }
+    .list-item-opend:hover {
+        background: rgb(99, 104, 121);
+    }    
 </style>

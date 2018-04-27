@@ -7,6 +7,7 @@ export default class TreeNode {
     this.children = []
     this.indent = 0
     this.opened = false
+    this.singleSelected = false
   }
 
   open (onopen) {
