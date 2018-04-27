@@ -8,6 +8,9 @@ export default class TreeNode {
     this.indent = 0
     this.opened = false
     this.singleSelected = false
+    this.expanded = false
+    this.leaf = true
+    this.icon = undefined
   }
 
   open (onopen) {
@@ -26,5 +29,13 @@ export default class TreeNode {
       key: this.name,
       value: 'none'
     }
+  }
+
+  expand () {
+    this.expanded = true
+  }
+
+  unexpand () {
+    this.expanded = false
   }
 }

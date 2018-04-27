@@ -16,6 +16,7 @@
   import AppKeyValuePage from '../page/AppKeyValuePage'
   import AppServerPage from '../page/AppServerPage'
   import { mapMutations } from 'vuex'
+  
   import ServerNode from '../../../client/servernode'
 
   let serverNode = new ServerNode('test db', {
@@ -90,6 +91,7 @@
         width: 100%;
         box-sizing: border-box;
         font-size: 14px;
+        -webkit-app-region: no-drag;
     }
 
     .left {
@@ -104,19 +106,14 @@
     .right {
         margin-left: 300px;
         height: 100%;
-        background: rgb(46, 46, 46);
+        background: rgb(26, 25, 25);
         color: white;
         line-height: 30px;
         overflow: auto;
         font-size: 14px;
         font-weight: bolder
     }
-
-    .right .result-key {
-        margin-left: 12px;
-        color: rgb(5, 192, 255);
-    }
-
+    
     .value-area {
         cursor: text;
     }

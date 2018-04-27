@@ -1,17 +1,15 @@
 <template>
-  <ul>
+  <ul class="list-tree">
     <template v-for="n in nodes">
         <AppTreeNode
           v-bind:node="n"
           v-bind:indent="indent"
-          v-bind:options="nodeOptions" :singleSelected="false" :doubleSelected="false" />
-        <template v-if="n.children && n.children.length > 0">
-          <li v-bind:key="n.name">
+          v-bind:options="nodeOptions"/>
+        <template v-if="n.expanded && n.children && n.children.length > 0">
             <AppTree
               v-bind:nodes="n.children"
               v-bind:indent="indent + 1"
               v-bind:options="options"/>
-          </li>
         </template>
         <template v-else>
         </template>
@@ -25,10 +23,16 @@
   export default {
     name: 'AppTree',
     props: ['nodes', 'indent', 'options'],
+    data () {
+      return {
+        expanded: false
+      }
+    },
     computed: {
       nodeOptions: function () {
+        let self = this
         return {
-          onSelect: this.options.onSelect
+          onSelect: self.options.onSelect
         }
       }
     },
@@ -39,12 +43,16 @@
 </script>
 
 <style>
+
+    .list-tree {
+        background: rgb(33, 34, 33);
+    }
+
     .list-item {
         height: 22px;
         line-height: 22px;
         cursor: default;
         padding-right: 5px;
-        background: rgb(71, 71, 71);
         color: white;
         white-space:nowrap;
         text-overflow:ellipsis;
@@ -56,19 +64,11 @@
         -webkit-user-select:none; 
         -ms-user-select:none; 
         user-select:none;
+        overflow: hidden;
     }
 
     .list-item:hover {
-        background: rgb(81, 81, 81);
-    }
-
-    .list-item .text {
-        margin-right: 10px;
-        text-overflow:ellipsis;
-        white-space:nowrap;
-        display: inline-block;
-        overflow: hidden;
-        font-size: 14px;
+        background: rgb(51, 53, 51);
     }
 
     .list-item-single-selected {

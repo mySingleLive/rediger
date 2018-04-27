@@ -17,7 +17,7 @@ const mutations = {
     console.log('SELECT state:', state)
     state.selected = node
   },
-  SINGLE_SELECT_NODE(state, node) {
+  SINGLE_SELECT_NODE (state, node) {
     state.menu.lastSingleSelected = node
   }
 }

@@ -33,6 +33,11 @@
     border-bottom: 1px solid rgb(43, 43, 43);
     box-sizing: border-box;
     overflow: hidden;
+    moz-user-select: -moz-none; 
+    -moz-user-select: none; 
+    -o-user-select:none; 
+    -webkit-user-select:none; 
+    -ms-user-select:none; 
 }
 
 #title-text {
@@ -41,6 +46,7 @@
   height: 100%;
   line-height: 30px;
   float: left;
+  -webkit-app-region: drag;
 }
 
 #app-title-btn-group {
