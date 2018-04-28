@@ -38,4 +38,12 @@ export default class TreeNode {
   unexpand () {
     this.expanded = false
   }
+
+  simpleInfo () {
+    return undefined
+  }
+
+  iconUrl () {
+    return undefined
+  }
 }

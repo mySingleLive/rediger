@@ -1,29 +1,27 @@
 <template>
   <li class="list-item"
-    v-on:dblclick="openNode(node)"
-    v-on:click="selectNode"
-    v-bind:class="{ 'list-item-single-selected': singleSelected, 'list-item-opend': doubleSelected }"
-    v-bind:style="{ paddingLeft: leftSpace + (indent * indentSpace) + 'px' }"
+    @dblclick="openNode(node)"
+    @click="selectNode"
+    :class="{ 'list-item-single-selected': singleSelected, 'list-item-opend': doubleSelected }"
+    :style="{ paddingLeft: leftSpace + (indent * indentSpace) + 'px' }"
    >
-      <template v-if="!node.leaf">
-        <div class="list-item-expand-area" @click="switchExpand(node)">
-          <div :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
-        </div>
-        <div class="list-item-icon"><img :src="nodeIcon(node)" width="18px" height="18px" alt=""></div>
-      </template>
-      <div class="text">{{ node.name }}</div>
+      <div class="list-item-expand-area" @click="switchExpand(node)">
+        <div v-if="!node.leaf && node.opened" :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
+      </div>
+      <div v-if="node.iconUrl() !== undefined" class="list-item-icon"><img :src="node.iconUrl()" width="18px" height="18px" alt=""></div>
+      <template v-if="node.type === 'server'"><ServerNode :node="node"/></template>
+      <div v-else class="text"><span class="node-name">{{ node.name }} </span><span class="node-description" v-html="node.simpleInfo()"></span></div>
   </li>
 </template>
 
 <script>
   import { mapMutations } from 'vuex'
+  import ServerNode from './ServerNode'
 
   const context = {
     lastSingleSelected: undefined,
     lastDoubleSelected: undefined,
-    nodeIconMap: {
-      'server': '/static/img/redis-icon.png'
-    }
+    currentDbSelected: undefined
   }
 
   export default {
@@ -36,6 +34,9 @@
       indentSpace () {
         return this.$store.state.Content.menu.indentSpace
       }
+    },
+    components: {
+      ServerNode
     },
     data () {
       return {
@@ -56,14 +57,14 @@
         context.lastSingleSelected = this
         this.singleSelected = true
         this.doubleSelected = false
-      },
-      nodeIcon: function (n) {
-        if (n.type === undefined) {
-          return ''
+        if (context.currentDbSelected !== undefined && context.currentDbSelected !== this) {
+          context.currentDbSelected.doubleSelected = true
         }
-        return context.nodeIconMap[n.type] || ''
       },
       switchExpand: function (n) {
+        if (!n.opened) {
+          return
+        }
         if (!n.expanded) {
           n.expand()
         } else {
@@ -82,14 +83,16 @@
         } else {
           this.switchExpand(n)
         }
-
-        let lastDoubleSelected = context.lastDoubleSelected
-        if (lastDoubleSelected !== undefined) {
-          lastDoubleSelected.doubleSelected = false
+        if (n.leaf) {
+          let lastDoubleSelected = context.lastDoubleSelected
+          if (lastDoubleSelected !== undefined) {
+            lastDoubleSelected.doubleSelected = false
+          }
+          context.lastDoubleSelected = this
+          this.singleSelected = false
+          this.doubleSelected = true
+          context.currentDbSelected = this
         }
-        context.lastDoubleSelected = this
-        this.singleSelected = false
-        this.doubleSelected = true
       }
     }
   }
@@ -133,6 +136,8 @@
     }
 
     .list-item-expand-area {
+      width: 16px;
+      height: 100%;
       padding-left: 2px;
       float: left;
     }
@@ -141,7 +146,7 @@
       width: 0px;
       height: 0px;
       border-width: 4px;
-      margin: 7px 5px 2px 0px;
+      margin: 7px 0px 2px 0px;
       border-style:solid dashed dashed dashed;
       border-color: transparent transparent transparent white;
       float: left;
@@ -151,7 +156,7 @@
       width: 0px;
       height: 0px;
       border-width: 3px;
-      margin: 7px 7px 2px 0px;
+      margin: 7px 0px 2px 0px;
       border-style:solid dashed dashed dashed;
       border-color: transparent white white transparent;
       float: left;
@@ -161,5 +166,16 @@
       padding: 2px 9px 0px 0px;
       float: left;
     }
+
+    .node-name {
+
+    }
     
+    .node-description {
+      margin-left: 8px;
+      line-height: 22px;
+      color: rgb(196, 194, 194);
+      font-size: 11px;
+    }
+
 </style>

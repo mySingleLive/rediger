@@ -2,6 +2,7 @@
 
 import TreeNode from './treenode'
 import KeyValuePage from './key_value_page'
+import { IconUrl } from './constants'
 
 function syntaxHighlight (json) {
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -63,8 +64,24 @@ export default class KeyNode extends TreeNode {
     })
   }
 
+  simpleInfo () {
+    return ': <span style="color:lightblue;font-style:italic">' + this.keyType + '</span>'
+  }
+
   getContent () {
     console.log('get key node content!')
     return this.queryResult
+  }
+
+  iconUrl () {
+    switch (this.keyType) {
+      case 'string':
+        return IconUrl.STRING
+      case 'list':
+        return IconUrl.LIST
+      case 'hash':
+        return IconUrl.HASH
+    }
+    return IconUrl.KEY
   }
 }

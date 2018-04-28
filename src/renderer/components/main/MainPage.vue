@@ -2,7 +2,7 @@
   <div id="main">
       <div>
         <div class="left">
-          <AppTree v-bind:nodes="nodes" indent="0" v-bind:options="treeOptions"/>
+          <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
         </div>
         <div class="right">
             <component v-bind:is="pageType" v-bind:page="page"></component>

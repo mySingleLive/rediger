@@ -5,8 +5,8 @@ const state = {
     value: 'Unkown'
   },
   menu: {
-    indentSpace: 20,
-    leftSpace: 30,
+    indentSpace: 15,
+    leftSpace: 20,
     lastSingleSelected: undefined
   }
 }
