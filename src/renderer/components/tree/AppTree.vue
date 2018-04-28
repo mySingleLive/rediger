@@ -45,42 +45,8 @@
 <style>
 
     .list-tree {
+        list-style-type:none;
         background: rgb(33, 34, 33);
     }
 
-    .list-item {
-        height: 22px;
-        line-height: 22px;
-        cursor: default;
-        padding-right: 5px;
-        color: white;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-        -ms-text-overflow: ellipsis;
-        box-sizing: border-box;
-        moz-user-select: -moz-none; 
-        -moz-user-select: none; 
-        -o-user-select:none; 
-        -webkit-user-select:none; 
-        -ms-user-select:none; 
-        user-select:none;
-        overflow: hidden;
-    }
-
-    .list-item:hover {
-        background: rgb(51, 53, 51);
-    }
-
-    .list-item-single-selected {
-        background: rgb(121, 137, 209);
-    }
-    .list-item-single-selected:hover {
-        background: rgb(121, 137, 209);
-    }
-    .list-item-opend {
-        background: rgb(99, 104, 121);
-    }
-    .list-item-opend:hover {
-        background: rgb(99, 104, 121);
-    }    
 </style>

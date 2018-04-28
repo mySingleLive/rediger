@@ -46,7 +46,6 @@
   height: 100%;
   line-height: 30px;
   float: left;
-  -webkit-app-region: drag;
 }
 
 #app-title-btn-group {

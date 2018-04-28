@@ -13,7 +13,6 @@ export default class ServerNode extends TreeNode {
     this.redis = undefined
     this.loaded = false
     this.leaf = false
-    this.icon = '@renderer/assets/redis-icon.png'
   }
 
   getData () {
