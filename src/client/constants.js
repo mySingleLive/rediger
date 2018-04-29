@@ -7,5 +7,6 @@ export const IconUrl = {
   STRING: '/static/img/str-icon2.png',
   LIST: '/static/img/list-icon.png',
   HASH: '/static/img/hash-icon.png',
+  FOLDER: '/static/img/folder-icon.png',
   KEY: '/static/img/key-icon.png'
 }

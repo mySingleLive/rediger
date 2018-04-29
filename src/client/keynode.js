@@ -33,10 +33,11 @@ function syntaxHighlight (json) {
 }
 
 export default class KeyNode extends TreeNode {
-  constructor (name, {serverNode, keyType}) {
+  constructor (name, {serverNode, keyType, parent}) {
     super(name, 'key')
     this.serverNode = serverNode
     this.keyType = keyType
+    this.parent = parent
   }
   open (onopen) {
     if (this.opened) {

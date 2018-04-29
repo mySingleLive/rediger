@@ -7,7 +7,7 @@
           v-bind:options="nodeOptions"/>
         <template v-if="n.expanded && n.children && n.children.length > 0">
             <AppTree
-              v-bind:nodes="n.children"
+              v-bind:nodes="n.getChildren()"
               v-bind:indent="indent + 1"
               v-bind:options="options"/>
         </template>

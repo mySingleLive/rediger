@@ -24,6 +24,10 @@ export default class TreeNode {
     this.children.push(node)
   }
 
+  getChildren () {
+    return this.children
+  }
+
   getContent () {
     return {
       key: this.name,
