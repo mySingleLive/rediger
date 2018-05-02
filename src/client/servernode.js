@@ -173,7 +173,7 @@ export default class ServerNode extends TreeNode {
     })
   }
 
-  getContent () {
+  getPage () {
     return this.info
   }
 

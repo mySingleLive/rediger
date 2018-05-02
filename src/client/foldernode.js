@@ -14,7 +14,7 @@ export default class FolderNode extends TreeNode {
     return ''
   }
 
-  getContent () {
+  getPage () {
     return ''
   }
 

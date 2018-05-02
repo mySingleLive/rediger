@@ -28,7 +28,7 @@ export default class TreeNode {
     return this.children
   }
 
-  getContent () {
+  getPage () {
     return {
       key: this.name,
       value: 'none'

@@ -56,7 +56,7 @@
         return {
           onSelect: function (node) {
             self.SELECT_NODE(node)
-            self.page = node.getContent()
+            self.page = node.getPage()
             if (self.page === undefined || self.page.type === undefined) {
               self.pageType = ''
             } else {

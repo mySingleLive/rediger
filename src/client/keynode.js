@@ -73,7 +73,7 @@ export default class KeyNode extends TreeNode {
     return ': <span style="color:lightblue;font-style:italic">' + this.keyType + '</span>'
   }
 
-  getContent () {
+  getPage () {
     console.log('get key node content!')
     return this.queryResult
   }
