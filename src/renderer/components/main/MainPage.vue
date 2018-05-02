@@ -106,7 +106,6 @@
         let scrollHeight = menuBox.scrollHeight
         let clientHeight = menuBox.clientHeight
         let clientWidth = menuBox.clientWidth
-        console.log('on scroll: scrollTop:', scrollTop, 'scrollHeight:', scrollHeight, 'clientHeight:', clientHeight)
         let rate = clientHeight / scrollHeight
         if (rate === 1) {
           this.showScrollBar = false
@@ -119,6 +118,9 @@
         let dy = (event.deltaY || 0) * speed
         menuBox.scrollTop += dy
         this.scrollTop = (menuBox.scrollTop / (scrollHeight - this.scrollHeight)) * clientHeight
+
+        console.log('on scroll: scrollTop:', scrollTop, 'scrollHeight:', scrollHeight, 'clientHeight:', clientHeight,
+          'scrollTop + clientHeight:', scrollTop + menuBox.clientHeight)
       }
     },
     components: {
