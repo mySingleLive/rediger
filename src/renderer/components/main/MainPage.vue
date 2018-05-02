@@ -1,17 +1,21 @@
 <template>
-  <div id="main">
-      <div>
-        <div class="left">
-          <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
-        </div>
-        <div class="right">
+  <section id="container">
+      <AppTitle title="Rediger"/>
+      <section id="main">
+        <section class="left">
+            <div class="menu-box">
+                <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
+            </div>
+        </section>
+        <section class="right">
             <component v-bind:is="pageType" v-bind:page="page"></component>
-        </div>
-      </div>
-  </div>
+        </section>
+      </section>
+  </section>
 </template>
 
 <script>
+  import AppTitle from '../title/AppTitle'
   import AppTree from '../tree/AppTree'
   import AppKeyValuePage from '../page/AppKeyValuePage'
   import AppServerPage from '../page/AppServerPage'
@@ -68,6 +72,7 @@
       ])
     },
     components: {
+      AppTitle,
       AppTree,
       AppKeyValuePage,
       AppServerPage
@@ -75,74 +80,6 @@
   }
 </script>
 
-<style>
-    * {
-        margin: 0px;
-        padding: 0px;
-    }
-
-    #main {
-        overflow: hidden;
-        background: rgb(102, 102, 102);
-        border-top: 1px solid rgb(155, 155, 155);
-        margin: 0px;
-        padding: 0px;
-        height: 100%;
-        width: 100%;
-        box-sizing: border-box;
-        font-size: 14px;
-        -webkit-app-region: no-drag;
-    }
-
-    .left {
-        float: left;
-        width: 300px;
-        height: 100%;
-        background: rgb(102, 102, 102);
-        overflow: hidden;
-    }
-
-
-    .right {
-        margin-left: 300px;
-        height: 100%;
-        background: rgb(26, 25, 25);
-        color: white;
-        line-height: 30px;
-        overflow: auto;
-        font-size: 14px;
-        font-weight: bolder
-    }
-    
-    .value-area {
-        cursor: text;
-    }
-
-    .value-area .block {
-        padding-left: 30px;
-        box-sizing: border-box;
-    }
-
-    .value-area .left-brace {
-    }
-
-    .value-area .left-bracket {
-    }
-
-    .value-area .key {
-        color: rgb(157, 211, 230);
-    }
-
-    .value-area .string {
-        color: rgb(228, 198, 115);
-    }
-
-    .value-area .number {
-        color: rgb(169, 216, 138);
-    }
-
-    .value-area .boolean {
-        color: rgb(12, 104, 209);
-    }
-
+<style lang="less">
+    @import "../../../../static/style/main.less";
 </style>

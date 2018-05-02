@@ -57,8 +57,10 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "redis": "^2.8.0",
     "ioredis": "^2.4.2",
+    "less": "^3.0.2",
+    "less-loader": "^4.1.0",
+    "redis": "^2.8.0",
     "redis-commands": "^1.0.1",
     "vue": "^2.3.3",
     "vue-electron": "^1.0.6",

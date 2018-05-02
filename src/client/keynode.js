@@ -4,40 +4,24 @@ import TreeNode from './treenode'
 import KeyValuePage from './key_value_page'
 import { IconUrl } from './constants'
 
-function syntaxHighlight (json) {
-  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
-    function (match) {
-      var cls = 'number'
-      if (/^"/.test(match)) {
-        if (/:$/.test(match)) {
-          cls = 'key'
-          match += '&nbsp;&nbsp;&nbsp;&nbsp;'
-        } else {
-          cls = 'string'
-        }
-      } else if (/true|false/.test(match)) {
-        cls = 'boolean'
-      } else if (/null/.test(match)) {
-        cls = 'null'
-      }
-      return '<span class="' + cls + '">' + match + '</span>'
-    })
-  json = json
-    .replace(/\{/g, '<span class="left-brace">{</span><div class="block">')
-    .replace(/\}/g, '</div><span class="right-brace">}</span>')
-    .replace(/\[/g, '<span class="left-bracket">[</span><div class="block">')
-    .replace(/\]/g, '</div><span class="right-bracket">]</span>')
-    .replace(/,/g, ',<br/>')
-  return json
-}
-
 export default class KeyNode extends TreeNode {
   constructor (name, {serverNode, keyType, parent}) {
     super(name, 'key')
     this.serverNode = serverNode
     this.keyType = keyType
     this.parent = parent
+    let redis = this.serverNode.redis
+    this.KEY_HANDLER = {
+      'string': function (key, callback) {
+        redis.get(key, callback)
+      },
+      'hash': function (key, callback) {
+        console.log('handle HASH key:', key)
+      },
+      'list': function (key, callback) {
+        console.log('handle LIST key:', key)
+      }
+    }
   }
   open (onopen) {
     if (this.opened) {
@@ -47,20 +31,40 @@ export default class KeyNode extends TreeNode {
     console.log('query key:', k)
     let self = this
     let callback = onopen
+    this.loadKeyType(function (keyType) {
+      let handler = self.KEY_HANDLER[keyType]
+      if (handler !== undefined) {
+        handler(k, function (err, ret) {
+          if (err !== undefined && err !== null) {
+            console.log('error:', err)
+          } else {
+            console.log('query result:', ret)
+            self.queryResult = new KeyValuePage({
+              key: k,
+              keyType: keyType,
+              value: ret
+            })
+          }
+          if (callback !== undefined) {
+            callback(self)
+          }
+        })
+      }
+    })
+  }
+
+  loadKeyType (callback) {
+    let k = this.name
     let redis = this.serverNode.redis
-    redis.get(k, function (err, ret) {
+    redis.type(k, function (err, ret) {
       if (err !== undefined && err !== null) {
         console.log('error:', err)
       } else {
-        console.log('query result:', ret)
-        self.queryResult = new KeyValuePage({
-          key: k,
-          value: syntaxHighlight(ret)
-        })
+        console.log('key type:', ret)
+        self.keyType = ret
       }
-      console.log('callback:', callback)
       if (callback !== undefined) {
-        callback(self)
+        callback(ret)
       }
     })
   }

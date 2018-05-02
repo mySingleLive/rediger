@@ -11,8 +11,6 @@
               v-bind:indent="indent + 1"
               v-bind:options="options"/>
         </template>
-        <template v-else>
-        </template>
     </template>
   </ul>
 </template>
@@ -42,11 +40,6 @@
   }
 </script>
 
-<style>
-
-    .list-tree {
-        list-style-type:none;
-        background: rgb(33, 34, 33);
-    }
-
+<style lang="less">
+    @import "../../../../static/style/menu.less";
 </style>

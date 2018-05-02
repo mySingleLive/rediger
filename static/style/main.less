@@ -1,0 +1,152 @@
+
+@import "./common/variables";
+@import "./common/helper";
+
+@main-top: @header-height;
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  overflow: hidden;
+  background: @color-background;
+}
+
+
+#main {
+  .absolute(@main-top, 0, 0, 0);
+  .size(100%, 100%);
+  overflow: hidden;
+  border-top: 1px solid #9b9b9b;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-size: 14px;
+  -webkit-app-region: no-drag;
+}
+
+.left {
+  .absolute(0, 0, 0, 0);
+  .size(@left-width, 100%);
+  overflow: hidden;
+}
+
+.right {
+  .absolute(0, 0, 0, @left-width);
+  .size(100%, 100%);
+  color: white;
+  line-height: 30px;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: bolder;
+  background: @color-right-background;
+}
+
+.menu-box {
+  .size(100%, 100%);
+  overflow: auto;
+  background: @color-menu-background;
+}
+
+.menu-box::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.menu-box::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  background: #535353;
+}
+.menu-box::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  background: @color-menu-background;
+}
+
+
+.value-area {
+  cursor: text;
+}
+
+.value-area .block {
+  padding-left: 30px;
+  box-sizing: border-box;
+}
+
+.value-area .left-brace {
+}
+
+.value-area .left-bracket {
+}
+
+.value-area .key {
+  color: rgb(157, 211, 230);
+}
+
+.value-area .string {
+  color: rgb(228, 198, 115);
+}
+
+.value-area .number {
+  color: rgb(169, 216, 138);
+}
+
+.value-area .boolean {
+  color: rgb(12, 104, 209);
+}
+
+.key-value-page {
+  .size(100%, 100%);
+  padding: 20px 0px 0px 0px;
+}
+#key-label {
+  cursor: default;
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+#result-key {
+  margin-left: 12px;
+  margin-top: 5px;
+  color: rgb(5, 192, 255);
+  box-sizing: border-box;
+  padding: 10px 8px 10px 8px;
+  text-align: center;
+  border: 1px solid rgb(26, 25, 25);
+}
+#key-area {
+  height: 50px;
+  padding-left: 30px;
+  border-bottom: 1px solid rgb(14, 13, 13);
+}
+#result-key:hover {
+  border-radius: 7px;
+  cursor: default;
+  background: rgb(41, 39, 39);
+  border: 1px solid rgb(133, 132, 132);
+}
+
+#value-area {
+  border-top: 1px solid rgb(92, 90, 90);
+  padding: 20px 0px 0px 30px;
+  .size(100%, 100%);
+  overflow: auto;
+}
+
+//.value-area {
+//  .size(100%, 100%);
+//}
+
+/*
+#value-area::-webkit-scrollbar {!*滚动条整体样式*!
+  width: 10px;     !*高宽分别对应横竖滚动条的尺寸*!
+  height: 1px;
+}
+#value-area::-webkit-scrollbar-thumb {!*滚动条里面小方块*!
+  background: #535353;
+}
+#value-area::-webkit-scrollbar-track {!*滚动条里面轨道*!
+  background: @color-menu-background;
+}
+*/

@@ -21,22 +21,3 @@
   }
 </script>
 
-<style>
-    .app-title-btn {
-        float: left;
-        height: 30px;
-        width: 30px;
-        text-align: center;
-        line-height: 30px;
-        -webkit-app-region: no-drag;
-        cursor: pointer;
-        color: rgb(236, 236, 236);
-    }
-    .app-title-btn:hover {
-        background-color: rgb(43, 43, 43);
-    }
-
-    .app-title-btn img {
-        margin: 5px auto;
-    }
-</style>
