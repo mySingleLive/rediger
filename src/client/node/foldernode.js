@@ -1,7 +1,7 @@
 'use strict'
 
 import TreeNode from './treenode'
-import { IconUrl } from './constants'
+import { IconUrl } from '../constants'
 
 export default class FolderNode extends TreeNode {
   constructor (name, {serverNode, parent}) {

@@ -3,7 +3,7 @@
 import TreeNode from './treenode'
 import KeyNode from './keynode'
 import FolderNode from './foldernode'
-import { IconUrl } from './constants'
+import { IconUrl } from '../constants'
 
 const Redis = require('ioredis')
 

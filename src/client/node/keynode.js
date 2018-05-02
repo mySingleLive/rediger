@@ -1,8 +1,8 @@
 'use strict'
 
 import TreeNode from './treenode'
-import KeyValuePage from './key_value_page'
-import { IconUrl } from './constants'
+import KeyValuePage from '../page/key_value_page'
+import { IconUrl } from '../constants'
 
 export default class KeyNode extends TreeNode {
   constructor (name, {serverNode, keyType, parent}) {

@@ -2,7 +2,7 @@
 
 import TreeNode from './treenode'
 import DbNode from './dbnode'
-import { IconUrl } from './constants'
+import { IconUrl } from '../constants'
 
 const Redis = require('ioredis')
 
