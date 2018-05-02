@@ -3,7 +3,4 @@
 import ValueView from './value_view'
 
 export default class PlainStringView extends ValueView {
-  constructor (data, node) {
-    super(data, node)
-  }
 }

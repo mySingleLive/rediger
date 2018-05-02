@@ -3,15 +3,17 @@
       <AppTitle title="Rediger"/>
       <section id="main">
         <section class="left">
-            <div class="menu-box" @mousewheel="onScroll">
+            <div class="menu-box" tabindex="-1" @mouseover="scrollBarAppear" @mouseout="scrollBarDisappear"
+                 @mousewheel="onScroll" @resize="onScroll">
                 <div class="scroll-bar" style="position: absolute;
-                 width: 8px; z-index: 100;
-                 left: 280px; background: #9b9b9b;
-                 opacity: 0.5"
+                 z-index: 100;
+                 left: 280px;"
+                 @mousedown="onScrollBarDragStart"
+                 @mousemove="onScrollBarDrag"
                 :style="{
-                   top: scrollTop + 'px',
-                   left: scrollLeft + 'px',
-                   height: scrollHeight + 'px',
+                   top: scrollBarTop + 'px',
+                   left: scrollBarLeft + 'px',
+                   height: scrollBarHeight + 'px',
                    display: showScrollBar ? 'block' : 'none'
                  }"></div>
                 <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
@@ -55,10 +57,14 @@
           serverNode
         ],
         pageType: '',
-        scrollTop: 0,
-        scrollLeft: 0,
-        scrollHeight: 0,
-        showScrollBar: false
+        scrollBarTop: 0,
+        scrollBarLeft: 0,
+        scrollBarHeight: 0,
+        scrollBarOpacity: 0.8,
+        scrollBarOffsetY: 0,
+        scrollBarDragging: false,
+        showScrollBar: false,
+        scrollBarAppeared: false
       }
     },
     computed: {
@@ -92,7 +98,50 @@
         let boxWidth = box.style.width
         return boxWidth - 5
       },
-      onScroll (event) {
+      onScrollBarDragStart (event) {
+        this.scrollBarOffsetY = this.scrollBarTop - event.clientY
+        let self = this
+        document.onmousemove = function (event) {
+          self.onScrollBarDrag(event)
+        }
+        document.onmouseup = function (event) {
+          console.log('document.onmouseup !!')
+          self.scrollBarDragging = false
+          self.scrollBarDisappear()
+          document.onmouseup = undefined
+        }
+      },
+      onScrollBarDrag (event) {
+        if (this.showScrollBar && event.buttons === 1) {
+          this.scrollBarDragging = true
+          this.scrollBarTop = this.scrollBarOffsetY + event.clientY
+          if (this.scrollBarTop < 0) {
+            this.scrollBarTop = 0
+          }
+
+          let menuBox = document.querySelector('.menu-box')
+          if (menuBox === undefined || menuBox === null) {
+            return
+          }
+          if (this.scrollBarTop + this.scrollBarHeight > menuBox.clientHeight) {
+            this.scrollBarTop = menuBox.clientHeight - this.scrollBarHeight
+          }
+
+          let scrollBar = document.querySelector('.menu-box .scroll-bar')
+          if (scrollBar === undefined || scrollBar === null) {
+            return
+          }
+          // let scrollBarTop = menuBox.scrollTop
+          let boxScrollHeight = menuBox.scrollHeight
+          let boxClientHeight = menuBox.clientHeight
+          menuBox.scrollTop = (this.scrollBarTop / (boxClientHeight - this.scrollBarHeight)) * (boxScrollHeight - boxClientHeight)
+          // this.refreshScrollBar(newClienY)
+        } else {
+          this.scrollBarDragging = false
+          document.onmousemove = undefined
+        }
+      },
+      refreshScrollBar (newScrollTop) {
         let menuBox = document.querySelector('.menu-box')
         if (menuBox === undefined || menuBox === null) {
           return
@@ -101,27 +150,48 @@
         if (scrollBar === undefined || scrollBar === null) {
           return
         }
-        console.log('wheel event:', event)
-        let scrollTop = menuBox.scrollTop
-        let scrollHeight = menuBox.scrollHeight
-        let clientHeight = menuBox.clientHeight
-        let clientWidth = menuBox.clientWidth
-        let rate = clientHeight / scrollHeight
+        // let scrollBarTop = menuBox.scrollTop
+        let boxScrollHeight = menuBox.scrollHeight
+        let boxClientHeight = menuBox.clientHeight
+        let boxClientWidth = menuBox.clientWidth
+        let rate = boxClientHeight / boxScrollHeight
         if (rate === 1) {
           this.showScrollBar = false
         } else {
           this.showScrollBar = true
-          this.scrollHeight = Math.max(8, clientHeight * rate)
-          this.scrollLeft = clientWidth - scrollBar.clientWidth
+          this.scrollBarHeight = Math.max(8, boxClientHeight * rate)
+          this.scrollBarLeft = boxClientWidth - scrollBar.clientWidth
+        }
+        menuBox.scrollTop = newScrollTop
+        this.scrollBarTop = (menuBox.scrollTop / (boxScrollHeight - boxClientHeight)) * (boxClientHeight - this.scrollBarHeight)
+        // console.log('on scroll: scrollTop:', scrollBarTop, 'scrollHeight:', boxScrollHeight, 'clientHeight:', boxClientHeight,
+        //   'scrollTop + clientHeight:', scrollBarTop + menuBox.clientHeight)
+      },
+      onScroll (event) {
+        let menuBox = document.querySelector('.menu-box')
+        if (menuBox === undefined || menuBox === null) {
+          return
         }
         let speed = 0.67
         let dy = (event.deltaY || 0) * speed
-        menuBox.scrollTop += dy
-        this.scrollTop = (menuBox.scrollTop / (scrollHeight - this.scrollHeight)) * clientHeight
-
-        console.log('on scroll: scrollTop:', scrollTop, 'scrollHeight:', scrollHeight, 'clientHeight:', clientHeight,
-          'scrollTop + clientHeight:', scrollTop + menuBox.clientHeight)
+        this.refreshScrollBar(menuBox.scrollTop + dy)
+      },
+      scrollBarAppear (event) {
+        if (this.showScrollBar && !this.scrollBarAppeared) {
+          let scrollBar = document.querySelector('.menu-box .scroll-bar')
+          scrollBar.classList.remove('scroll-bar-fadeout')
+          this.scrollBarAppeared = true
+        }
+      },
+      scrollBarDisappear (event) {
+        if (this.showScrollBar && !this.scrollBarDragging && this.scrollBarAppeared) {
+          let scrollBar = document.querySelector('.menu-box .scroll-bar')
+          scrollBar.classList.add('scroll-bar-fadeout')
+          scrollBar.classList.remove('scroll-bar-fadein')
+          this.scrollBarAppeared = false
+        }
       }
+
     },
     components: {
       AppTitle,
@@ -134,4 +204,39 @@
 
 <style lang="less">
     @import "../../../../static/style/main.less";
+
+    @scroll-bar-opacity: 0.78;
+    @scolor-croll-bar-background: #676a69;
+
+    @keyframes scroll-bar-fadein-animation {
+        from { opacity: 0 }
+        to { opacity: @scroll-bar-opacity }
+    }
+
+
+    @keyframes scroll-bar-fadeout-animation {
+        from { opacity: @scroll-bar-opacity }
+        to { opacity: 0 }
+    }
+
+    .scroll-bar {
+        border: 1px solid @scolor-croll-bar-background;
+        border-radius: 2px;
+        opacity: @scroll-bar-opacity;
+        width: 10px;
+        background: @scolor-croll-bar-background;
+    }
+
+    .scroll-bar-fadeout {
+        -webkit-animation-name: scroll-bar-fadeout-animation;
+        -webkit-animation-duration: 0.6s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-delay: 0.3s;
+        -webkit-animation-iteration-count: initial;
+        -webkit-animation-direction: normal;
+        -webkit-animation-play-state: running;
+        -webkit-animation-fill-mode: forwards;
+    }
+
+
 </style>
