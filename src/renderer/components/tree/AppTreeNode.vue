@@ -5,12 +5,14 @@
     :class="{ 'list-item-single-selected': singleSelected, 'list-item-opend': doubleSelected }"
     :style="{ paddingLeft: leftSpace + (indent * indentSpace) + 'px' }"
    >
-      <div class="list-item-expand-area" @click="switchExpand(node)">
-        <div v-if="!node.leaf && node.opened" :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
+      <div class="list-item-content">
+          <div class="list-item-expand-area" @click="switchExpand(node)">
+            <div v-if="!node.leaf && node.opened" :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
+          </div>
+          <div v-if="node.iconUrl() !== undefined" class="list-item-icon"><img :src="node.iconUrl()" width="18px" height="18px" alt=""></div>
+          <template v-if="node.type === 'server'"><ServerNode :node="node"/></template>
+          <div v-else class="text"><span class="node-name" >{{ node.name }} </span><span class="node-description" v-html="node.simpleInfo()"></span></div>
       </div>
-      <div v-if="node.iconUrl() !== undefined" class="list-item-icon"><img :src="node.iconUrl()" width="18px" height="18px" alt=""></div>
-      <template v-if="node.type === 'server'"><ServerNode :node="node"/></template>
-      <div v-else class="text"><span class="node-name">{{ node.name }} </span><span class="node-description" v-html="node.simpleInfo()"></span></div>
   </li>
 </template>
 
@@ -61,24 +63,41 @@
           context.currentDbSelected.doubleSelected = true
         }
       },
+      expand: function (n) {
+        n.expand()
+        let opts = this.options || {}
+        if (opts.onExpand !== undefined) {
+          opts.onExpand()
+        }
+      },
+      unexpand: function (n) {
+        n.unexpand()
+        let opts = this.options || {}
+        if (opts.onUnexpand !== undefined) {
+          opts.onUnexpand()
+        }
+      },
       switchExpand: function (n) {
         if (!n.opened) {
           return
         }
+        let opts = this.options || {}
+        console.log('switchExpand!!', opts)
         if (!n.expanded) {
-          n.expand()
+          this.expand(n)
         } else {
-          n.unexpand()
+          this.unexpand(n)
         }
       },
       openNode: function (n) {
         let opt = this.options || {}
+        let self = this
         if (!n.opened) {
           n.open(function (node) {
             if (opt.onSelect !== undefined) {
               opt.onSelect(node)
             }
-            node.expand()
+            self.expand(node)
           })
         } else {
           this.switchExpand(n)

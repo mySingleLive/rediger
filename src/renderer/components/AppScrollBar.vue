@@ -1,73 +1,27 @@
 <template>
-  <section id="container">
-      <AppTitle title="Rediger"/>
-      <section id="main">
-          <HSeparatorBox>
-              <Panel name="left" width="300px" height="100%">
-                <div class="menu-box" @mouseover="scrollBarAppear" @mouseout="scrollBarDisappear"
-                     @mousewheel="onScroll">
-                    <div class="scroll-bar" style="position: absolute;
-                     z-index: 100;"
-                     @mousedown="onScrollBarDragStart"
-                     @mousemove="onScrollBarDrag"
-                    :style="{
-                       top: scrollBarTop + 'px',
-                       left: scrollBarLeft + 'px',
-                       width: scrollBarWidth + 'px',
-                       height: scrollBarHeight + 'px',
-                       display: showScrollBar ? 'block' : 'none'
-                     }"></div>
-                    <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
-                </div>
-              </Panel>
-              <Panel width="100%" height="100%">
-                <!--<section class="right" panel="right">-->
-                    <component v-bind:is="pageType" v-bind:page="page"></component>
-                <!--</section>-->
-              </Panel>
-          </HSeparatorBox>
-      </section>
-  </section>
+    <div class="scroll-bar" style="position: absolute;
+                 z-index: 100;"
+         @mousedown="onScrollBarDragStart"
+         @mousemove="onScrollBarDrag"
+         :style="{
+                   top: scrollBarTop + 'px',
+                   left: scrollBarLeft + 'px',
+                   width: scrollBarWidth + 'px',
+                   height: scrollBarHeight + 'px',
+                   display: showScrollBar ? 'block' : 'none'
+                 }"></div>
 </template>
 
 <script>
-  import AppTitle from '../title/AppTitle'
-  import AppTree from '../tree/AppTree'
-  import AppKeyValuePage from '../page/AppKeyValuePage'
-  import AppServerPage from '../page/AppServerPage'
-  import Panel from '../Panel'
-  import HSeparatorBox from '../HSeparatorBox'
-  import ColSeparator from '../ColSeparator'
-  import { mapMutations } from 'vuex'
-  
-  import ServerNode from '../../../client/node/servernode'
-
-  let serverNode = new ServerNode('test db', {
-    port: 6379,
-    host: '120.27.240.62',
-    family: 4,
-    password: 'Beastredis',
-    db: 0
-  })
-
   export default {
-    name: 'MainPage',
+    name: "AppScrollBar",
+    props: [],
     data () {
       return {
-        value: '',
-        page: {
-          key: 'Unknown',
-          value: 'Unknown',
-          type: ''
-        },
-        nodes: [
-          serverNode
-        ],
-        pageType: '',
         scrollBarTop: 0,
         scrollBarLeft: 0,
         scrollBarHeight: 0,
-        scrollBarWidth: 7,
+        scrollBarWidth: 6,
         scrollBarSeparatorWidth: 2,
         scrollBarOffsetY: 0,
         scrollBarDragging: false,
@@ -75,37 +29,10 @@
         scrollBarAppeared: false
       }
     },
-    computed: {
-      indentSpace () {
-        return this.$store.state.Content.menu.indentSpace
-      },
-      treeOptions () {
-        let self = this
-        return {
-          onSelect: function (node) {
-            self.SELECT_NODE(node)
-            self.page = node.getPage()
-            if (self.page === undefined || self.page.type === undefined) {
-              self.pageType = ''
-            } else {
-              self.pageType = 'App' + self.page.type + 'Page'
-            }
-          },
-          onExpand: function () {
-            console.log('onExpand')
-            self.onScrollBarResize()
-          },
-          onUnexpand: function () {
-            console.log('onUnexpand')
-            self.onScrollBarResize()
-          }
-        }
-      }
-    },
+    created: function () {
+      console.log('created!!!')
+    }
     methods: {
-      ...mapMutations([
-        'SELECT_NODE'
-      ]),
       onScrollBarDragStart (event) {
         this.scrollBarOffsetY = this.scrollBarTop - event.clientY
         let self = this
@@ -222,59 +149,10 @@
           this.scrollBarAppeared = false
         }
       }
-
-    },
-    components: {
-      AppTitle,
-      AppTree,
-      AppKeyValuePage,
-      AppServerPage,
-      Panel,
-      HSeparatorBox,
-      ColSeparator
     }
   }
 </script>
 
 <style lang="less">
-    @import "../../../../static/style/main.less";
-
-    @scroll-bar-opacity: 0.68;
-    @scolor-croll-bar-border-lefttop: #848887;
-    @scolor-croll-bar-border-rightbottom: #707473;
-    @scolor-croll-bar-background: #7b7f7e;
-
-    @keyframes scroll-bar-fadein-animation {
-        from { opacity: 0 }
-        to { opacity: @scroll-bar-opacity }
-    }
-
-
-    @keyframes scroll-bar-fadeout-animation {
-        from { opacity: @scroll-bar-opacity }
-        to { opacity: 0 }
-    }
-
-    .scroll-bar {
-        border-left: 1px solid @scolor-croll-bar-border-lefttop;
-        border-top: 1px solid @scolor-croll-bar-border-lefttop;
-        border-right: 1px solid @scolor-croll-bar-border-rightbottom;
-        border-bottom: 1px solid @scolor-croll-bar-border-rightbottom;
-        /*border-radius: 2px;*/
-        opacity: @scroll-bar-opacity;
-        background: @scolor-croll-bar-background;
-    }
-
-    .scroll-bar-fadeout {
-        -webkit-animation-name: scroll-bar-fadeout-animation;
-        -webkit-animation-duration: 0.45s;
-        -webkit-animation-timing-function: linear;
-        -webkit-animation-delay: 0.25s;
-        -webkit-animation-iteration-count: initial;
-        -webkit-animation-direction: normal;
-        -webkit-animation-play-state: running;
-        -webkit-animation-fill-mode: forwards;
-    }
-
 
 </style>

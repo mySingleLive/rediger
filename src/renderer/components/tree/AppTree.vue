@@ -2,14 +2,14 @@
   <ul class="list-tree">
     <template v-for="n in nodes">
         <AppTreeNode
-          v-bind:node="n"
-          v-bind:indent="indent"
-          v-bind:options="nodeOptions"/>
+          :node="n"
+          :indent="indent"
+          :options="nodeOptions"/>
         <template v-if="n.expanded && n.children && n.children.length > 0">
             <AppTree
-              v-bind:nodes="n.getChildren()"
-              v-bind:indent="indent + 1"
-              v-bind:options="options"/>
+              :nodes="n.getChildren()"
+              :indent="indent + 1"
+              :options="options"/>
         </template>
     </template>
   </ul>
@@ -30,7 +30,9 @@
       nodeOptions: function () {
         let self = this
         return {
-          onSelect: self.options.onSelect
+          onSelect: self.options.onSelect,
+          onExpand: self.options.onExpand,
+          onUnexpand: self.options.onUnexpand
         }
       }
     },
