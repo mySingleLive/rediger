@@ -1,6 +1,7 @@
 
 @import "./common/variables";
 @import "./common/helper";
+@import "./scrollbar";
 
 @main-top: @header-height;
 
@@ -30,9 +31,17 @@ body {
 }
 
 
-.rediger-panel {
+.box {
   .absolute(0, 0, 0, 0);
   overflow: hidden;
+  box-sizing: border-box;
+}
+
+
+.box-inner {
+  .size(100%, 100%);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .left {
@@ -66,18 +75,6 @@ body {
   overflow: hidden;
   background: @color-menu-background;
 }
-
-.menu-box::-webkit-scrollbar {/*滚动条整体样式*/
-  width: 0px;     /*高宽分别对应横竖滚动条的尺寸*/
-  height: 0px;
-}
-.menu-box::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-  background: #535353;
-}
-.menu-box::-webkit-scrollbar-track {/*滚动条里面轨道*/
-  background: @color-menu-background;
-}
-
 
 .value-area {
   cursor: text;

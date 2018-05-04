@@ -1,53 +1,68 @@
 <template>
     <div class="h-separator-box" ref="box">
-        <slot ref="panels"></slot>
-        <template v-for="item in separators">
-            <div class="layout-separator-col" style="width: 20px; background: yellow"> {{ item.index }}</div>
-        </template>
+        <slot name="left" :leftWidth="leftWidth + 'px'"></slot>
+        <ColSeparator :offset="separators.left.offset" :ondrag="separators.left.onDrag"></ColSeparator>
+        <slot name="center" :centerLeft="centerLeft"></slot>
+        <slot name="right" left="300"></slot>
     </div>
 </template>
 
 <script>
+  import ColSeparator from './ColSeparator'
+
   export default {
     name: 'HSeparatorBox',
     data () {
+      let self = this
       return {
-        separators: []
+        separators: {
+          left: {
+            offset: 40,
+            onDrag (event) {
+              self.leftWidth = event.offset
+              self.centerLeft = event.offset
+            }
+          }
+        },
+        leftWidth: 0,
+        centerWidth: 0,
+        centerLeft: 0
       }
     },
     mounted () {
-      this.init()
+      let self = this
+      this.$nextTick(function () {
+        self.init()
+      })
+    },
+    watch: {
+      'separators.left.offset': function (val, oldVal) {
+        console.log('sep first left change:', val, 'old:', val)
+        this.centerLeft = val
+        this.calcCenterWidth()
+      }
     },
     methods: {
+      getBox () {
+        return this.$refs.box
+      },
       init () {
-        let slots = this.$slots.default
-        console.log('$refs:', this.$refs, '$slots', this.$slots)
-        this.panels = []
-        for (let i in slots) {
-          let slot = slots[i]
-          console.log('Slots[' + i + ']:', slot)
-          if (slot.tag !== undefined) {
-            this.panels.push(slot)
-          }
-        }
-        console.log('Init Panels:', this.panels)
-        let totalLeft = 0
-        for (let i in this.panels) {
-          let panel = this.panels[i]
-          let width = panel.width
-          console.log('panel width:', width)
-          if (width !== undefined && width[width.length - 1] !== '%') {
-            totalLeft += parseInt(width)
-          } else {
-            // panel.resizePanel({
-            //   left: totalLeft
-            // })
-            panel.data.panelLeft = totalLeft
-            break
-          }
-        }
-        console.log('total left:', totalLeft)
+        // let leftWidth = parseInt(this.$slots.left[0].componentInstance.panelWidth)
+        this.leftWidth = 300
+        console.log('left-panel width:', this.leftWidth)
+        this.separators.left.offset = this.leftWidth
+      },
+      onDragStart () {
+        this.separators.left.dragging = true
+      },
+      calcCenterWidth () {
+        let box = this.getBox()
+        let boxWidth = box.clientWidth
+        this.centerWidth = boxWidth - this.leftWidth
       }
+    },
+    components: {
+      ColSeparator
     }
   }
 </script>

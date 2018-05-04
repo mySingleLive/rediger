@@ -1,76 +1,49 @@
 <template>
-  <section id="container">
-      <AppTitle title="Rediger"/>
-      <section id="main">
-          <HSeparatorBox>
-              <Box slot-scope="{leftWidth}"
-                     name="left"
-                     :width="leftWidth"
-                     height="100%"
-                     slot="left">
-                <div class="menu-box" @mouseover="scrollBarAppear" @mouseout="scrollBarDisappear"
-                     @mousewheel="onScroll" ref="menuBox">
-                    <AppTree v-bind:nodes="nodes" :indent="0" v-bind:options="treeOptions"/>
-                    <div class="scroll-bar" style="position: absolute;
+    <div :panel="name"
+         :class="['box', boxClass]"
+        :style="{
+            top: (boxTop || 0) + 'px',
+            left: (boxLeft || 0) + 'px',
+            width: boxWidth || '100%',
+            height: boxHeight || '100%'
+        }"
+        ref="box">
+        <template v-if="scrollX === true || scrollY === true">
+            <div class="box-inner" @mouseover="scrollBarAppear" @mouseout="scrollBarDisappear"
+                 @mousewheel="onScroll" ref="innerBox">
+                <slot></slot>
+
+                <div class="scroll-bar" style="position: absolute;
                    z-index: 100;"
-                         @mousedown="onScrollBarDragStart"
-                         @mousemove="onScrollBarDrag"
-                         :style="{
+                     @mousedown="onScrollBarDragStart"
+                     @mousemove="onScrollBarDrag"
+                     :style="{
                      top: scrollBarYTop + 'px',
                      left: scrollBarYLeft + 'px',
                      width: scrollBarWidth + 'px',
                      height: scrollBarYHeight + 'px',
                      display: showScrollBarY ? 'block' : 'none'
                    }" ref="scollbarY"></div>
-                </div>
-              </Box>
-              <Box slot-scope="{centerLeft, centerWidth}"
-                   :left="centerLeft"
-                   :width="centerWidth + 'px'"
-                   height="100%" slot="center">
-                <!--<section class="right" panel="right">-->
-                    <component v-bind:is="pageType" v-bind:page="page"></component>
-                <!--</section>-->
-              </Box>
-          </HSeparatorBox>
-      </section>
-  </section>
+
+            </div>
+        </template>
+        <template v-else>
+            <slot></slot>
+        </template>
+    </div>
 </template>
 
 <script>
-  import AppTitle from '../title/AppTitle'
-  import AppTree from '../tree/AppTree'
-  import AppKeyValuePage from '../page/AppKeyValuePage'
-  import AppServerPage from '../page/AppServerPage'
-  import Box from '../Box'
-  import HSeparatorBox from '../HSeparatorBox'
-  import ColSeparator from '../ColSeparator'
-  import { mapMutations } from 'vuex'
-  
-  import ServerNode from '../../../client/node/servernode'
-
-  let serverNode = new ServerNode('test db', {
-    port: 6379,
-    host: '120.27.240.62',
-    family: 4,
-    password: 'Beastredis',
-    db: 0
-  })
-
   export default {
-    name: 'MainPage',
+    name: 'Box',
+    props: ['name', 'top', 'left', 'width', 'height', 'boxClass', 'scrollX', 'scrollY'],
     data () {
       return {
-        value: '',
-        page: {
-          key: 'Unknown',
-          value: 'Unknown',
-          type: ''
-        },
-        nodes: [
-          serverNode
-        ],
-        pageType: '',
+        boxTop: this.top,
+        boxLeft: this.left,
+        boxWidth: this.width,
+        boxHeight: this.height,
+
         scrollBarYTop: 0,
         scrollBarYLeft: 0,
         scrollBarYHeight: 0,
@@ -82,43 +55,34 @@
         scrollBarYAppeared: false
       }
     },
-    computed: {
-      indentSpace () {
-        return this.$store.state.Content.menu.indentSpace
+    watch: {
+      left: function () {
+        this.boxLeft = this.left
+        this.resizeScrollBarY()
       },
-      treeOptions () {
-        let self = this
-        return {
-          onSelect: function (node) {
-            self.SELECT_NODE(node)
-            self.page = node.getPage()
-            if (self.page === undefined || self.page.type === undefined) {
-              self.pageType = ''
-            } else {
-              self.pageType = 'App' + self.page.type + 'Page'
-            }
-          },
-          onExpand: function () {
-            console.log('onExpand')
-            self.onScrollBarResize()
-          },
-          onUnexpand: function () {
-            console.log('onUnexpand')
-            self.onScrollBarResize()
-          }
-        }
+      width: function () {
+        this.boxWidth = this.width
+        this.resizeScrollBarY()
+      },
+      height: function () {
+        this.boxHeight = this.height
+        this.resizeScrollBarY()
       }
     },
+    mounted () {
+      this.boxTop = this.top
+      this.boxLeft = this.left
+      this.boxWidth = this.width
+      this.boxHeight = this.height
+    },
     methods: {
-      ...mapMutations([
-        'SELECT_NODE'
-      ]),
       getInnerBox () {
-        return this.$refs.menuBox
+        return this.$refs.innerBox
       },
       getScrollBarY () {
         return this.$refs.scollbarY
       },
+
       onScrollBarDragStart (event) {
         this.scrollBarYOffsetY = this.scrollBarYTop - event.clientY
         let self = this
@@ -235,19 +199,10 @@
         }
       }
 
-    },
-    components: {
-      AppTitle,
-      AppTree,
-      AppKeyValuePage,
-      AppServerPage,
-      Box,
-      HSeparatorBox,
-      ColSeparator
     }
   }
 </script>
 
-<style lang="less">
-    @import "../../../../static/style/main.less";
+<style>
+
 </style>

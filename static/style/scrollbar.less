@@ -1,0 +1,38 @@
+
+
+@scroll-bar-opacity: 0.68;
+@scolor-croll-bar-border-lefttop: #848887;
+@scolor-croll-bar-border-rightbottom: #707473;
+@scolor-croll-bar-background: #7b7f7e;
+
+@keyframes scroll-bar-fadein-animation {
+  from { opacity: 0 }
+  to { opacity: @scroll-bar-opacity }
+}
+
+
+@keyframes scroll-bar-fadeout-animation {
+  from { opacity: @scroll-bar-opacity }
+  to { opacity: 0 }
+}
+
+.scroll-bar {
+  border-left: 1px solid @scolor-croll-bar-border-lefttop;
+  border-top: 1px solid @scolor-croll-bar-border-lefttop;
+  border-right: 1px solid @scolor-croll-bar-border-rightbottom;
+  border-bottom: 1px solid @scolor-croll-bar-border-rightbottom;
+  /*border-radius: 2px;*/
+  opacity: @scroll-bar-opacity;
+  background: @scolor-croll-bar-background;
+}
+
+.scroll-bar-fadeout {
+  -webkit-animation-name: scroll-bar-fadeout-animation;
+  -webkit-animation-duration: 0.45s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: 0.25s;
+  -webkit-animation-iteration-count: initial;
+  -webkit-animation-direction: normal;
+  -webkit-animation-play-state: running;
+  -webkit-animation-fill-mode: forwards;
+}
