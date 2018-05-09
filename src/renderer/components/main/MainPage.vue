@@ -17,7 +17,7 @@
                          @mousemove="onScrollBarDrag"
                          :style="{
                      top: scrollBarYTop + 'px',
-                     left: scrollBarYLeft + 'px',
+                     right: 2 + 'px',
                      width: scrollBarWidth + 'px',
                      height: scrollBarYHeight + 'px',
                      display: showScrollBarY ? 'block' : 'none'

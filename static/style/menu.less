@@ -47,6 +47,9 @@
   .size(100%, 100%);
 }
 
+.list-item .text .node-name {
+}
+
 
 .list-item-expand-area {
   width: 16px;
@@ -91,7 +94,7 @@
 }
 
 .node-name {
-  width: 30px;
+  .relative(2, 0, 0, 4);
   text-overflow:ellipsis;
   white-space:nowrap;
   overflow: hidden;
@@ -99,8 +102,11 @@
 
 
 .node-description {
+  .relative(2, 0, 0, 4);
   margin-left: 8px;
   line-height: 22px;
   color: rgb(176, 186, 178);
   font-size: 11px;
 }
+
+

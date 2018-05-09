@@ -7,11 +7,13 @@
    >
       <div class="list-item-content">
           <div class="list-item-expand-area" @click="switchExpand(node)">
-            <div v-if="!node.leaf && node.opened" :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
+            <div z-index="3" v-if="!node.leaf && node.opened" :class="{ 'list-item-expand': !node.expanded, 'list-item-unexpand': node.expanded }"></div>
           </div>
           <div v-if="node.iconUrl() !== undefined" class="list-item-icon"><img :src="node.iconUrl()" width="18px" height="18px" alt=""></div>
           <template v-if="node.type === 'server'"><ServerNode :node="node"/></template>
-          <div v-else class="text"><span class="node-name" >{{ node.name }} </span><span class="node-description" v-html="node.simpleInfo()"></span></div>
+          <div v-else class="text">
+              <div class="node-name" >{{ node.name }} </div><div class="node-description" v-html="node.simpleInfo()"></div>
+          </div>
       </div>
   </li>
 </template>

@@ -1,6 +1,7 @@
 'use strict'
 
 export const IconUrl = {
+  LOADING: 'static/img/loading.svg',
   SERVER_CLOSED: 'static/img/redis-closed-icon.png',
   SERVER_OPENED: 'static/img/redis-opened-icon.png',
   DB: 'static/img/db-icon2.png',
