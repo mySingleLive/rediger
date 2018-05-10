@@ -10,6 +10,7 @@ export default class TreeNode {
     this.singleSelected = false
     this.expanded = false
     this.leaf = true
+    this.loading = false
     this.icon = undefined
   }
 
@@ -26,6 +27,14 @@ export default class TreeNode {
 
   getChildren () {
     return this.children
+  }
+
+  isLoading () {
+    return this.loading
+  }
+
+  startLoading () {
+    this.loading = true
   }
 
   getPage () {

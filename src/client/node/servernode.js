@@ -157,8 +157,9 @@ export default class ServerNode extends TreeNode {
     if (this.opened) {
       return
     }
-    this.connection()
     let self = this
+    this.startLoading()
+    this.connection()
     let callback = onopen
     this.loadInfo(function (info) {
       for (let key in info) {
@@ -166,6 +167,7 @@ export default class ServerNode extends TreeNode {
           self.addDb(info[key])
         }
       }
+      self.loading = false
       self.opened = true
       if (callback !== undefined) {
         callback(self)

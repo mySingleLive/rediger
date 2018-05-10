@@ -103,6 +103,7 @@ export default class DbNode extends TreeNode {
     if (this.opened) {
       return
     }
+    this.startLoading()
     this.connection()
     let self = this
     let callback = onopen
@@ -125,6 +126,7 @@ export default class DbNode extends TreeNode {
             self.addKeyChild(keyInfo)
           }
           self.sortChildNodes()
+          self.loading = false
           self.opened = true
           console.log('nodes:', self.children)
           if (callback !== undefined) {
