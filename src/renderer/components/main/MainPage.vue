@@ -1,6 +1,6 @@
 <template>
   <section id="container">
-      <AppTitle title="Rediger"/>
+      <!--<AppTitle title="Rediger"/>-->
       <section id="main">
           <HSeparatorBox>
               <Box slot-scope="{leftWidth}"
@@ -46,8 +46,9 @@
   import HSeparatorBox from '../HSeparatorBox'
   import ColSeparator from '../ColSeparator'
   import { mapMutations } from 'vuex'
-  
+
   import ServerNode from '../../../client/node/servernode'
+  import ConnectionStore from '../../../client/db/connection_store'
 
   let serverNode = new ServerNode('test db', {
     port: 6379,
@@ -55,6 +56,15 @@
     family: 4,
     password: 'Beastredis',
     db: 0
+  })
+
+  let connStore = new ConnectionStore()
+  connStore.findAllConnections((err, ret) => {
+    if (err !== undefined && err !== null) {
+      console.log('error:', err)
+    } else {
+      console.log('connections:', ret)
+    }
   })
 
   export default {

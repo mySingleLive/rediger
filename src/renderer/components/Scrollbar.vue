@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: "Scrollbar",
+    name: 'Scrollbar',
     props: ['top', 'left', 'right', 'width', 'height'],
     data () {
       return {

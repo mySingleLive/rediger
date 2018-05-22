@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -23,7 +23,6 @@ function createWindow () {
     height: 563,
     // useContentSize: true,
     width: 1000,
-    frame: false,
     show: false,
     backgroundColor: '#666666'
   })
@@ -58,6 +57,15 @@ ipcMain.on('min', e => mainWindow.minimize())
 
 ipcMain.on('close', e => {
   mainWindow.close()
+})
+
+
+const treeMenu = new Menu()
+treeMenu.append(new MenuItem('Add Connection...'))
+
+ipcMain.on('show_tree_menu', e => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  treeMenu.popup(win)
 })
 
 /**
