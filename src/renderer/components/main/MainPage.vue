@@ -1,6 +1,11 @@
 <template>
   <section id="container">
       <!--<AppTitle title="Rediger"/>-->
+      <section id="toolbar">
+          <div style="padding: 15px 1px 1px 10px;">
+              <img src="static/img/connection_add.svg" width="30px" height="30px"/>
+          </div>
+      </section>
       <section id="main">
           <HSeparatorBox>
               <Box slot-scope="{leftWidth}"

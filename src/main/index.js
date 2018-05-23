@@ -59,7 +59,6 @@ ipcMain.on('close', e => {
   mainWindow.close()
 })
 
-
 const treeMenu = new Menu()
 treeMenu.append(new MenuItem('Add Connection...'))
 
