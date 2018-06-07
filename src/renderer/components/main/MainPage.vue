@@ -2,9 +2,11 @@
   <section id="container">
       <!--<AppTitle title="Rediger"/>-->
       <section id="toolbar">
-          <div style="padding: 15px 1px 1px 10px;">
-              <img src="static/img/connection_add.svg" width="30px" height="30px"/>
-          </div>
+          <!--<div style="position: absolute; top: 1px; left: 5px; width: 28px; height: 28px; background-image: url('/static/img/connection_add.svg'); background-repeat:no-repeat; background-size:26px 26px;" class="toolbar-btn"></div>-->
+          <ToolbarButton :index="0" image-url="/static/img/connection_add.svg" :action="openConnectionAddition()"></ToolbarButton>
+          <ToolbarSeparator :index="1"></ToolbarSeparator>
+          <ToolbarButton :index="1" image-url="/static/img/keys_2.svg" :action="openConnectionAddition()" :left-separator="1"></ToolbarButton>
+          <ToolbarButton :index="2" image-url="/static/img/lua.svg" :action="openConnectionAddition()" :left-separator="1"></ToolbarButton>
       </section>
       <section id="main">
           <HSeparatorBox>
@@ -48,6 +50,8 @@
   import AppKeyValuePage from '../page/AppKeyValuePage'
   import AppServerPage from '../page/AppServerPage'
   import Box from '../Box'
+  import ToolbarButton from '../ToolbarButton'
+  import ToolbarSeparator from '../ToolbarSeparator'
   import HSeparatorBox from '../HSeparatorBox'
   import ColSeparator from '../ColSeparator'
   import { mapMutations } from 'vuex'
@@ -248,6 +252,10 @@
           scrollBar.classList.remove('scroll-bar-fadein')
           this.scrollBarYAppeared = false
         }
+      },
+
+      openConnectionAddition () {
+        console.log('do openConnectionAddition')
       }
 
     },
@@ -257,6 +265,8 @@
       AppKeyValuePage,
       AppServerPage,
       Box,
+      ToolbarButton,
+      ToolbarSeparator,
       HSeparatorBox,
       ColSeparator
     }
