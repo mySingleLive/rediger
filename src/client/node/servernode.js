@@ -6,6 +6,8 @@ import { IconUrl } from '../constants'
 
 const Redis = require('ioredis')
 
+const ServerMap = {}
+
 function parseParimayValText (val) {
   let n
   try {
@@ -84,6 +86,15 @@ export default class ServerNode extends TreeNode {
     this.loaded = false
     this.leaf = false
     this.info = {}
+  }
+
+  static addServer (name, data) {
+    if (ServerMap[name] === undefined) {
+      let serverNode = new ServerNode(name, data)
+      ServerMap[name] = serverNode
+      return serverNode
+    }
+    return undefined
   }
 
   getData () {

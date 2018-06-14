@@ -35,8 +35,16 @@
                    :left="centerLeft"
                    :width="centerWidth + 'px'"
                    height="100%" slot="center">
-                <!--<section class="right" panel="right">-->
-                    <component v-bind:is="pageType" v-bind:page="page"></component>
+                  <div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">
+                      <TabList/>
+                      <Box
+                           :left="'0px'"
+                           :width="centerWidth + 'px'"
+                           :top="tabHeight"
+                           height="100%" slot="center">
+                        <component v-bind:is="pageType" v-bind:page="page"></component>
+                      </Box>
+                  </div>
                 <!--</section>-->
               </Box>
           </HSeparatorBox>
@@ -49,17 +57,20 @@
   import AppTree from '../tree/AppTree'
   import AppKeyValuePage from '../page/AppKeyValuePage'
   import AppServerPage from '../page/AppServerPage'
+  import TabList from '../TabList'
   import Box from '../Box'
   import ToolbarButton from '../ToolbarButton'
   import ToolbarSeparator from '../ToolbarSeparator'
   import HSeparatorBox from '../HSeparatorBox'
   import ColSeparator from '../ColSeparator'
+
   import { mapMutations } from 'vuex'
 
+  import { Sizes } from '../../../client/constants'
   import ServerNode from '../../../client/node/servernode'
   import ConnectionStore from '../../../client/db/connection_store'
 
-  let serverNode = new ServerNode('test db', {
+  let serverNode = ServerNode.addServer('test db', {
     port: 6379,
     host: '120.27.240.62',
     family: 4,
@@ -81,11 +92,6 @@
     data () {
       return {
         value: '',
-        page: {
-          key: 'Unknown',
-          value: 'Unknown',
-          type: ''
-        },
         nodes: [
           serverNode
         ],
@@ -102,20 +108,27 @@
       }
     },
     computed: {
-      indentSpace () {
-        return this.$store.state.Content.menu.indentSpace
+      tabHeight () {
+        return Sizes.TAB_HEIGHT
+      },
+      page () {
+        let page = this.$store.state.Content.selectedPage
+        if (page === undefined || page.type === undefined) {
+          this.pageType = ''
+        } else {
+          this.pageType = 'App' + page.type + 'Page'
+        }
+        return page || {
+          key: 'Unknown',
+          value: 'Unknown',
+          type: ''
+        }
       },
       treeOptions () {
         let self = this
         return {
           onSelect: function (node) {
-            self.SELECT_NODE(node)
-            self.page = node.getPage()
-            if (self.page === undefined || self.page.type === undefined) {
-              self.pageType = ''
-            } else {
-              self.pageType = 'App' + self.page.type + 'Page'
-            }
+            self.ADD_PAGE(node.getPage())
           },
           onExpand: function () {
             console.log('onExpand')
@@ -130,7 +143,8 @@
     },
     methods: {
       ...mapMutations([
-        'SELECT_NODE'
+        'ADD_PAGE',
+        'SELECT_PAGE'
       ]),
       getInnerBox () {
         return this.$refs.menuBox
@@ -264,6 +278,7 @@
       AppTree,
       AppKeyValuePage,
       AppServerPage,
+      TabList,
       Box,
       ToolbarButton,
       ToolbarSeparator,

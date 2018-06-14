@@ -3,10 +3,11 @@
 import Page from './page'
 
 export default class ServerPage extends Page {
-  constructor ({name, port, host}) {
+  constructor ({name, port, host, fullname}) {
     super({
       type: 'Server',
-      title: name
+      title: name,
+      fullname: fullname
     })
     this.name = name
     this.port = port

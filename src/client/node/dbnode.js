@@ -185,4 +185,8 @@ export default class DbNode extends TreeNode {
   iconUrl () {
     return IconUrl.DB
   }
+
+  getFullName () {
+    return this.serverNode.getFullName() + '\\' + this.name
+  }
 }

@@ -31,14 +31,26 @@ function syntaxHighlight (json) {
 }
 
 export default class KeyValuePage extends Page {
-  constructor ({key, keyType, value}) {
+  constructor ({keyNode, key, keyType, value, fullname}) {
     super({
       type: 'KeyValue',
-      title: key
+      title: key,
+      fullname: fullname
     })
+    this.reload = () => {
+      keyNode.reload()
+    }
+    this.getKeyNode = () => {
+      return keyNode
+    }
+    this.pageMode = 'add'
     this.key = key
     this.keyType = keyType
     this.value = value
     this.jsonViewValue = syntaxHighlight(value)
+  }
+
+  iconUrl () {
+    return this.getKeyNode().iconUrl()
   }
 }

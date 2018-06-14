@@ -59,4 +59,11 @@ export default class TreeNode {
   iconUrl () {
     return undefined
   }
+
+  getFullName () {
+    return this.name
+  }
+
+  reload () {
+  }
 }

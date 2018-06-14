@@ -3,7 +3,10 @@
 @import "./common/helper";
 @import "./scrollbar";
 
+@tab-height: 30px;
+@tab-top: 0px;
 @main-top: @header-height + 1;
+
 
 * {
   margin: 0px;
@@ -38,6 +41,12 @@ body {
   -webkit-app-region: no-drag;
 }
 
+#tab_list {
+  .absolute(0, 0, 0, 0);
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid #4b4b4b;
+}
 
 .box {
   .absolute(0, 0, 0, 0);

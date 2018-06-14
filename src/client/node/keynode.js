@@ -29,24 +29,24 @@ export default class KeyNode extends TreeNode {
     }
     let k = this.name
     console.log('query key:', k)
-    let self = this
-    let callback = onopen
-    this.loadKeyType(function (keyType) {
-      let handler = self.KEY_HANDLER[keyType]
+    this.loadKeyType((keyType) => {
+      let handler = this.KEY_HANDLER[keyType]
       if (handler !== undefined) {
-        handler(k, function (err, ret) {
+        handler(k, (err, ret) => {
           if (err !== undefined && err !== null) {
             console.log('error:', err)
           } else {
             console.log('query result:', ret)
-            self.queryResult = new KeyValuePage({
+            this.queryResult = new KeyValuePage({
+              keyNode: this,
               key: k,
               keyType: keyType,
-              value: ret
+              value: ret,
+              fullname: this.getFullName()
             })
           }
-          if (callback !== undefined) {
-            callback(self)
+          if (onopen !== undefined) {
+            onopen(this)
           }
         })
       }
@@ -56,17 +56,22 @@ export default class KeyNode extends TreeNode {
   loadKeyType (callback) {
     let k = this.name
     let redis = this.serverNode.redis
-    redis.type(k, function (err, ret) {
+    redis.type(k, (err, ret) => {
       if (err !== undefined && err !== null) {
         console.log('error:', err)
       } else {
         console.log('key type:', ret)
-        self.keyType = ret
+        this.keyType = ret
       }
       if (callback !== undefined) {
         callback(ret)
+        this.cachedCallback = callback
       }
     })
+  }
+
+  reload () {
+    this.loadKeyType(this.cachedCallback)
   }
 
   simpleInfo () {
@@ -88,5 +93,9 @@ export default class KeyNode extends TreeNode {
         return IconUrl.HASH
     }
     return IconUrl.KEY
+  }
+
+  getFullName () {
+    return this.parent.getFullName() + ':' + this.name
   }
 }
