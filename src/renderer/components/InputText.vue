@@ -2,7 +2,7 @@
     <div class="input-text" :class="{focus: isFocus}">
         <div class="text-container">
             <!--<div class="text-value-area" tabindex="0" @focus="onFocus" @blur="onBlur">ssssss</div>-->
-            <input type="text" @focus="onFocus" @blur="onBlur">
+            <input type="text" @focus="onFocus" @blur="onBlur" :placeholder="placeholder" :value="value">
         </div>
     </div>
 </template>
@@ -10,9 +10,13 @@
 <script>
   export default {
     name: 'InputText',
+    props: [
+      'placeholder', 'defaultValue'
+    ],
     data () {
       return {
-        isFocus: false
+        isFocus: false,
+        value: this.defaultValue
       }
     },
     methods: {

@@ -3,22 +3,25 @@
         <div class="form">
             <div class="row">
                 <div class="label">Name</div>
-                <InputText id="conn-name" ref="connName"></InputText>
+                <InputText id="conn-name" ref="connName" placeholder="Connection Name"></InputText>
             </div>
             <div class="row">
                 <div class="label">Host</div>
-                <InputText id="conn-host" ref="connHost"></InputText>
+                <InputText id="conn-host" ref="connHost" placeholder="Redis Server Host"></InputText>
             </div>
             <div class="row">
                 <div class="label">Port</div>
-                <InputText id="conn-port" ref="connPort"></InputText>
+                <InputText id="conn-port" ref="connPort" defaultValue="6379"></InputText>
             </div>
             <div class="row">
                 <div class="label">Auth</div>
-                <InputText id="conn-auth" ref="connAuth"></InputText>
+                <InputText id="conn-auth" ref="connAuth" placeholder="Authentication Password"></InputText>
             </div>
-            <div class="submit-button" style="position: absolute; top: 180px; left: 36px; width: 420px">
-                Add Connection
+            <div class="normal-button" style="position: absolute; top: 180px; left: 0px; width: 280px">
+                Test Connection
+            </div>
+            <div class="submit-button" style="position: absolute; top: 180px; right: 0px; width: 100px">
+                Add
             </div>
         </div>
     </div>
@@ -45,7 +48,7 @@
         position: absolute;
         left: 80px;
         top: 100px;
-        width: 520px;
+        width: 476px;
     }
 
     .new-connection-page > .form > .row {
@@ -65,12 +68,23 @@
         font-weight: bold;
     }
 
+
+    .normal-button {
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #4f5456;
+        border-radius: 6px;
+        border: 1px solid #878989;
+    }
+
+
     .submit-button {
         height: 30px;
         line-height: 30px;
         text-align: center;
         background-color: #445b32;
-        border-radius: 8px;
+        border-radius: 6px;
         border: 1px solid #8e9a6f;
     }
 
