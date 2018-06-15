@@ -3,10 +3,10 @@
       <!--<AppTitle title="Rediger"/>-->
       <section id="toolbar">
           <!--<div style="position: absolute; top: 1px; left: 5px; width: 28px; height: 28px; background-image: url('/static/img/connection_add.svg'); background-repeat:no-repeat; background-size:26px 26px;" class="toolbar-btn"></div>-->
-          <ToolbarButton :index="0" image-url="/static/img/connection_add.svg" :action="openConnectionAddition()"></ToolbarButton>
+          <ToolbarButton :index="0" image-url="/static/img/connection_add.svg" :action="onOpenConnectionAddition"></ToolbarButton>
           <ToolbarSeparator :index="1"></ToolbarSeparator>
-          <ToolbarButton :index="1" image-url="/static/img/keys_2.svg" :action="openConnectionAddition()" :left-separator="1"></ToolbarButton>
-          <ToolbarButton :index="2" image-url="/static/img/lua.svg" :action="openConnectionAddition()" :left-separator="1"></ToolbarButton>
+          <ToolbarButton :index="1" image-url="/static/img/keys_2.svg" :action="onOpenKeysPage" :left-separator="1"></ToolbarButton>
+          <ToolbarButton :index="2" image-url="/static/img/lua.svg" :action="onOpenLuaPage" :left-separator="1"></ToolbarButton>
       </section>
       <section id="main">
           <HSeparatorBox>
@@ -37,7 +37,7 @@
                    height="100%" slot="center">
                   <div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%">
                       <TabList/>
-                      <Box
+                      <Box id="page-body"
                            :left="'0px'"
                            :width="centerWidth + 'px'"
                            :top="tabHeight"
@@ -57,6 +57,7 @@
   import AppTree from '../tree/AppTree'
   import AppKeyValuePage from '../page/AppKeyValuePage'
   import AppServerPage from '../page/AppServerPage'
+  import AppNewConnectionPage from '../page/AppNewConnectionPage'
   import TabList from '../TabList'
   import Box from '../Box'
   import ToolbarButton from '../ToolbarButton'
@@ -67,6 +68,7 @@
   import { mapMutations } from 'vuex'
 
   import { Sizes } from '../../../client/constants'
+  import NewConnectionPage from '../../../client/page/new_connection_page'
   import ServerNode from '../../../client/node/servernode'
   import ConnectionStore from '../../../client/db/connection_store'
 
@@ -244,6 +246,7 @@
         }, 50)
       },
       onScroll (event) {
+        console.log('do onScroll')
         let box = this.getInnerBox()
         if (box === undefined || box === null) {
           return
@@ -268,16 +271,27 @@
         }
       },
 
-      openConnectionAddition () {
-        console.log('do openConnectionAddition')
-      }
+      onOpenConnectionAddition () {
+        console.log('do onOpenConnectionAddition')
+        let newPage = new NewConnectionPage()
+        console.log(newPage)
+        this.ADD_PAGE(newPage)
+      },
 
+      onOpenKeysPage () {
+        console.log('do onOpenKeysPage')
+      },
+
+      onOpenLuaPage () {
+        console.log('do onOpenLuaPage')
+      }
     },
     components: {
       AppTitle,
       AppTree,
       AppKeyValuePage,
       AppServerPage,
+      AppNewConnectionPage,
       TabList,
       Box,
       ToolbarButton,

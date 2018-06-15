@@ -10,9 +10,7 @@ export const IconUrl = {
   LIST: 'static/img/list-icon.png',
   HASH: 'static/img/hash-icon.png',
   FOLDER: 'static/img/folder-icon.png',
-  KEY: 'static/img/key-icon.png',
-
-  TAB_CLOSE_BTN: 'static/img/tab_close_btn_2.svg'
+  KEY: 'static/img/key-icon.png'
 }
 
 export const Sizes = {
